@@ -1,6 +1,6 @@
 # MOE-Flutter-Inventory
 
-Inventory package for MOE Flutter ecosystem — inventory items, warehouses, stock movements.
+Inventory package for MOE Flutter ecosystem â€” inventory items, warehouses, stock movements.
 
 ## Installation
 
@@ -9,7 +9,7 @@ dependencies:
   moe_flutter_inventory:
     git:
       url: https://github.com/mindofemanizer/MOE-Flutter-Inventory.git
-      ref: master
+      ref: v1.0.0
 ```
 
 ## Usage
@@ -169,9 +169,9 @@ await ref.read(stockMovementsProvider.notifier).loadMovements(
 
 ## Stock Status Helpers
 
-- `isOutOfStock` — available ≤ 0
-- `isLowStock` — available > 0 but ≤ reorderPoint
-- `needsReorder` — same as isLowStock
-- `totalValue` — quantityOnHand × unitCost
-- `capacityPercentage` — currentUsage / capacity × 100
-- `isNearlyFull` — capacityPercentage > 90%
+- `isOutOfStock` â€” available â‰¤ 0
+- `isLowStock` â€” available > 0 but â‰¤ reorderPoint
+- `needsReorder` â€” same as isLowStock
+- `totalValue` â€” quantityOnHand Ã— unitCost
+- `capacityPercentage` â€” currentUsage / capacity Ã— 100
+- `isNearlyFull` â€” capacityPercentage > 90%
