@@ -9,7 +9,7 @@ dependencies:
   moe_flutter_inventory:
     git:
       url: https://github.com/mindofemanizer/MOE-Flutter-Inventory.git
-      ref: main
+      ref: master
 ```
 
 ## Usage

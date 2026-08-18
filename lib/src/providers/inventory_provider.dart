@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:moe_flutter_core/moe_flutter_core.dart';
-import 'package:moe_flutter_inventory/src/config/inventory_config.dart';
 import 'package:moe_flutter_inventory/src/models/warehouse_model.dart';
 import 'package:moe_flutter_inventory/src/models/inventory_item_model.dart';
 import 'package:moe_flutter_inventory/src/models/stock_movement_model.dart';
@@ -12,9 +11,13 @@ sealed class WarehouseState {
   const WarehouseState();
 }
 
-final class WarehouseInitial extends WarehouseState {}
+final class WarehouseInitial extends WarehouseState {
+  const WarehouseInitial();
+}
 
-final class WarehouseLoading extends WarehouseState {}
+final class WarehouseLoading extends WarehouseState {
+  const WarehouseLoading();
+}
 
 final class WarehousesLoaded extends WarehouseState {
   final List<WarehouseModel> warehouses;
@@ -68,9 +71,10 @@ class WarehousesNotifier extends StateNotifier<WarehouseState> {
       capacity: capacity,
     );
 
-    if (result is Ok && state is WarehousesLoaded) {
+    if (result case Ok(:final data)) {
+      if (state is! WarehousesLoaded) return result;
       final loaded = state as WarehousesLoaded;
-      state = WarehousesLoaded([...loaded.warehouses, result.data]);
+      state = WarehousesLoaded([...loaded.warehouses, data]);
     }
 
     return result;
@@ -82,9 +86,13 @@ sealed class InventoryItemsState {
   const InventoryItemsState();
 }
 
-final class InventoryItemsInitial extends InventoryItemsState {}
+final class InventoryItemsInitial extends InventoryItemsState {
+  const InventoryItemsInitial();
+}
 
-final class InventoryItemsLoading extends InventoryItemsState {}
+final class InventoryItemsLoading extends InventoryItemsState {
+  const InventoryItemsLoading();
+}
 
 final class InventoryItemsLoaded extends InventoryItemsState {
   final List<InventoryItemModel> items;
@@ -100,7 +108,8 @@ final class InventoryItemsError extends InventoryItemsState {
 class InventoryItemsNotifier extends StateNotifier<InventoryItemsState> {
   final InventoryRepository _repository;
 
-  InventoryItemsNotifier(this._repository) : super(const InventoryItemsInitial());
+  InventoryItemsNotifier(this._repository)
+    : super(const InventoryItemsInitial());
 
   Future<void> loadItems({
     String? search,
@@ -126,10 +135,11 @@ class InventoryItemsNotifier extends StateNotifier<InventoryItemsState> {
   Future<InventoryItemModel?> getItem(String id) async {
     final result = await _repository.getItem(id);
 
-    if (result is Ok) {
-      return result.data;
-    } else {
-      return null;
+    switch (result) {
+      case Ok(:final data):
+        return data;
+      case Err():
+        return null;
     }
   }
 
@@ -152,9 +162,10 @@ class InventoryItemsNotifier extends StateNotifier<InventoryItemsState> {
       warehouseIds: warehouseIds,
     );
 
-    if (result is Ok && state is InventoryItemsLoaded) {
+    if (result case Ok(:final data)) {
+      if (state is! InventoryItemsLoaded) return result;
       final loaded = state as InventoryItemsLoaded;
-      state = InventoryItemsLoaded([...loaded.items, result.data]);
+      state = InventoryItemsLoaded([...loaded.items, data]);
     }
 
     return result;
@@ -187,9 +198,13 @@ sealed class StockMovementsState {
   const StockMovementsState();
 }
 
-final class StockMovementsInitial extends StockMovementsState {}
+final class StockMovementsInitial extends StockMovementsState {
+  const StockMovementsInitial();
+}
 
-final class StockMovementsLoading extends StockMovementsState {}
+final class StockMovementsLoading extends StockMovementsState {
+  const StockMovementsLoading();
+}
 
 final class StockMovementsLoaded extends StockMovementsState {
   final List<StockMovementModel> movements;
@@ -205,7 +220,8 @@ final class StockMovementsError extends StockMovementsState {
 class StockMovementsNotifier extends StateNotifier<StockMovementsState> {
   final InventoryRepository _repository;
 
-  StockMovementsNotifier(this._repository) : super(const StockMovementsInitial());
+  StockMovementsNotifier(this._repository)
+    : super(const StockMovementsInitial());
 
   Future<void> loadMovements({
     String? itemId,
@@ -287,16 +303,19 @@ final inventoryRepositoryProvider = Provider<InventoryRepository>((ref) {
 });
 
 /// Provider for WarehousesNotifier.
-final warehousesProvider = StateNotifierProviderFactory<WarehousesNotifier>(
-  (ref) => WarehousesNotifier(ref.watch(inventoryRepositoryProvider)),
-);
+final warehousesProvider =
+    StateNotifierProvider<WarehousesNotifier, WarehouseState>(
+      (ref) => WarehousesNotifier(ref.watch(inventoryRepositoryProvider)),
+    );
 
 /// Provider for InventoryItemsNotifier.
-final inventoryItemsProvider = StateNotifierProviderFactory<InventoryItemsNotifier>(
-  (ref) => InventoryItemsNotifier(ref.watch(inventoryRepositoryProvider)),
-);
+final inventoryItemsProvider =
+    StateNotifierProvider<InventoryItemsNotifier, InventoryItemsState>(
+      (ref) => InventoryItemsNotifier(ref.watch(inventoryRepositoryProvider)),
+    );
 
 /// Provider for StockMovementsNotifier.
-final stockMovementsProvider = StateNotifierProviderFactory<StockMovementsNotifier>(
-  (ref) => StockMovementsNotifier(ref.watch(inventoryRepositoryProvider)),
-);
+final stockMovementsProvider =
+    StateNotifierProvider<StockMovementsNotifier, StockMovementsState>(
+      (ref) => StockMovementsNotifier(ref.watch(inventoryRepositoryProvider)),
+    );

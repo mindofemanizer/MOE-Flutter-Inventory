@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 /// Model representing an inventory item with stock tracking.
 class InventoryItemModel extends Equatable {
   final String id;
@@ -13,7 +15,7 @@ class InventoryItemModel extends Equatable {
   final double reorderPoint;
   final double? reorderQuantity;
   final List<String> warehouseIds;
-  final DateTime lastCountDate;
+  final DateTime? lastCountDate;
   final double unitCost;
   final bool isActive;
   final DateTime createdAt;
@@ -31,15 +33,16 @@ class InventoryItemModel extends Equatable {
     this.reservedQuantity = 0.0,
     required this.warehouseIds,
     this.lastCountDate,
+    double? availableQuantity,
     this.reorderPoint = 0.0,
     this.reorderQuantity,
     this.unitCost = 0.0,
     this.isActive = true,
     required this.createdAt,
     required this.updatedAt,
-  })  : assert quantityOnHand >= 0,
-        reservedQuantity >= 0,
-        availableQuantity = quantityOnHand - reservedQuantity;
+  })  : assert(quantityOnHand >= 0),
+        assert(reservedQuantity >= 0),
+        availableQuantity = availableQuantity ?? quantityOnHand - reservedQuantity;
 
   factory InventoryItemModel.fromJson(Map<String, dynamic> json) {
     return InventoryItemModel(
@@ -52,7 +55,7 @@ class InventoryItemModel extends Equatable {
       categoryName: json['category_name'] as String?,
       quantityOnHand: (json['quantity_on_hand'] as num?)?.toDouble() ?? 0.0,
       reservedQuantity: (json['reserved_quantity'] as num?)?.toDouble() ?? 0.0,
-      availableQuantity: (json['available_quantity'] as num?)?.toDouble() ?? 0.0,
+      availableQuantity: (json['available_quantity'] as num?)?.toDouble(),
       reorderPoint: (json['reorder_point'] as num?)?.toDouble() ?? 0.0,
       reorderQuantity: (json['reorder_quantity'] as num?)?.toDouble(),
       warehouseIds: (json['warehouse_ids'] as List<dynamic>? ?? [])
@@ -83,7 +86,7 @@ class InventoryItemModel extends Equatable {
       'reorder_point': reorderPoint,
       if (reorderQuantity != null) 'reorder_quantity': reorderQuantity,
       'warehouse_ids': warehouseIds,
-      if (lastCountDate != null) 'last_count_date': lastCountDate.toIso8601String(),
+      if (lastCountDate != null) 'last_count_date': lastCountDate!.toIso8601String(),
       'unit_cost': unitCost,
       'is_active': isActive,
       'created_at': createdAt.toIso8601String(),

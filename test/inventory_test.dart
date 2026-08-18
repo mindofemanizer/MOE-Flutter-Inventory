@@ -16,7 +16,7 @@ void main() {
 
   group('InventoryItemModel', () {
     test('calculates availableQuantity', () {
-      const item = InventoryItemModel(
+      final item = InventoryItemModel(
         id: 'test',
         sku: 'SKU1',
         name: 'Product',
@@ -31,7 +31,7 @@ void main() {
     });
 
     test('isOutOfStock returns true when available <= 0', () {
-      const item = InventoryItemModel(
+      final item = InventoryItemModel(
         id: 'test',
         sku: 'SKU1',
         name: 'Product',
@@ -46,7 +46,7 @@ void main() {
     });
 
     test('isLowStock returns true when below reorderPoint', () {
-      const item = InventoryItemModel(
+      final item = InventoryItemModel(
         id: 'test',
         sku: 'SKU1',
         name: 'Product',
@@ -62,7 +62,7 @@ void main() {
     });
 
     test('totalValue calculates correctly', () {
-      const item = InventoryItemModel(
+      final item = InventoryItemModel(
         id: 'test',
         sku: 'SKU1',
         name: 'Product',
@@ -122,7 +122,7 @@ void main() {
 
   group('StockMovementModel', () {
     test('isInbound returns true for in movements', () {
-      const movement = StockMovementModel(
+      final movement = StockMovementModel(
         id: 'mov1',
         itemId: 'item1',
         itemName: 'Test',
@@ -140,7 +140,7 @@ void main() {
     });
 
     test('isOutbound returns true for out movements', () {
-      const movement = StockMovementModel(
+      final movement = StockMovementModel(
         id: 'mov1',
         itemId: 'item1',
         itemName: 'Test',
@@ -158,7 +158,7 @@ void main() {
     });
 
     test('isTransfer returns true for transfer movements', () {
-      const movement = StockMovementModel(
+      final movement = StockMovementModel(
         id: 'mov1',
         itemId: 'item1',
         itemName: 'Test',
@@ -215,7 +215,7 @@ void main() {
 
   group('WarehouseModel', () {
     test('capacityPercentage calculates correctly', () {
-      const warehouse = WarehouseModel(
+      final warehouse = WarehouseModel(
         id: 'wh1',
         name: 'Main Warehouse',
         code: 'WH-MAIN',
@@ -229,7 +229,7 @@ void main() {
     });
 
     test('isNearlyFull returns true when over 90%', () {
-      const warehouse = WarehouseModel(
+      final warehouse = WarehouseModel(
         id: 'wh1',
         name: 'Main Warehouse',
         code: 'WH-MAIN',
@@ -278,7 +278,7 @@ void main() {
     });
 
     test('copyWith updates fields', () {
-      const warehouse = WarehouseModel(
+      final warehouse = WarehouseModel(
         id: 'wh1',
         name: 'Main Warehouse',
         code: 'WH-MAIN',

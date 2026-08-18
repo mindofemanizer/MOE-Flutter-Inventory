@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 /// Type of stock movement.
 sealed class StockMovementType {
   const StockMovementType();
@@ -126,16 +128,16 @@ class StockMovementModel extends Equatable {
   }
 
   /// Is this an incoming movement (+stock)?
-  bool get isInbound => type == StockMovementTypeIn.string;
+  bool get isInbound => type == StockMovementType.in_.stringValue;
 
   /// Is this an outgoing movement (-stock)?
-  bool get isOutbound => type == StockMovementTypeOut.string;
+  bool get isOutbound => type == StockMovementType.out.stringValue;
 
   /// Is this a transfer between warehouses?
-  bool get isTransfer => type == StockMovementTypeTransfer.string;
+  bool get isTransfer => type == StockMovementType.transfer.stringValue;
 
   /// Is this a manual adjustment?
-  bool get isAdjustment => type == StockMovementTypeAdjustment.string;
+  bool get isAdjustment => type == StockMovementType.adjustment.stringValue;
 
   @override
   List<Object?> get props => [

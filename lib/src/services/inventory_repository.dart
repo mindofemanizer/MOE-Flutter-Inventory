@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:moe_flutter_core/moe_flutter_core.dart';
 import 'package:moe_flutter_inventory/src/config/inventory_config.dart';
@@ -10,9 +9,8 @@ import 'package:moe_flutter_inventory/src/models/stock_movement_model.dart';
 /// Repository for inventory operations.
 class InventoryRepository {
   final Dio _dio;
-  final MoeInventoryConfig _config;
 
-  InventoryRepository(this._dio, this._config);
+  InventoryRepository(this._dio, MoeInventoryConfig _);
 
   // ── Warehouses ─────────────────────────────────────────────
 
@@ -29,10 +27,7 @@ class InventoryRepository {
     } on DioException catch (e) {
       return Err(mapDioErrorToFailure(e));
     } catch (e) {
-      return Err(AppFailure(
-        type: FailureType.unknown,
-        message: e.toString(),
-      ));
+      return Err(AppFailure(type: FailureType.unknown, message: e.toString()));
     }
   }
 
@@ -49,25 +44,25 @@ class InventoryRepository {
     double capacity = 0.0,
   }) async {
     try {
-      final response = await _dio.post('/warehouses', data: {
-        'name': name,
-        'code': code,
-        if (address != null) 'address': address,
-        if (city != null) 'city': city,
-        if (province != null) 'province': province,
-        if (postalCode != null) 'postal_code': postalCode,
-        if (contactName != null) 'contact_name': contactName,
-        if (contactPhone != null) 'contact_phone': contactPhone,
-        'capacity': capacity,
-      });
+      final response = await _dio.post(
+        '/warehouses',
+        data: {
+          'name': name,
+          'code': code,
+          if (address != null) 'address': address,
+          if (city != null) 'city': city,
+          if (province != null) 'province': province,
+          if (postalCode != null) 'postal_code': postalCode,
+          if (contactName != null) 'contact_name': contactName,
+          if (contactPhone != null) 'contact_phone': contactPhone,
+          'capacity': capacity,
+        },
+      );
       return Ok(WarehouseModel.fromJson(response.data as Map<String, dynamic>));
     } on DioException catch (e) {
       return Err(mapDioErrorToFailure(e));
     } catch (e) {
-      return Err(AppFailure(
-        type: FailureType.unknown,
-        message: e.toString(),
-      ));
+      return Err(AppFailure(type: FailureType.unknown, message: e.toString()));
     }
   }
 
@@ -79,15 +74,13 @@ class InventoryRepository {
     } on DioException catch (e) {
       return Err(mapDioErrorToFailure(e));
     } catch (e) {
-      return Err(AppFailure(
-        type: FailureType.unknown,
-        message: e.toString(),
-      ));
+      return Err(AppFailure(type: FailureType.unknown, message: e.toString()));
     }
   }
 
   /// Update warehouse.
-  Future<AppResult<void>> updateWarehouse(String id, {
+  Future<AppResult<void>> updateWarehouse(
+    String id, {
     String? name,
     String? code,
     String? address,
@@ -99,25 +92,25 @@ class InventoryRepository {
     bool? isActive,
   }) async {
     try {
-      await _dio.patch('/warehouses/$id', data: {
-        if (name != null) 'name': name,
-        if (code != null) 'code': code,
-        if (address != null) 'address': address,
-        if (city != null) 'city': city,
-        if (province != null) 'province': province,
-        if (postalCode != null) 'postal_code': postalCode,
-        if (contactName != null) 'contact_name': contactName,
-        if (contactPhone != null) 'contact_phone': contactPhone,
-        if (isActive != null) 'is_active': isActive,
-      });
+      await _dio.patch(
+        '/warehouses/$id',
+        data: {
+          if (name != null) 'name': name,
+          if (code != null) 'code': code,
+          if (address != null) 'address': address,
+          if (city != null) 'city': city,
+          if (province != null) 'province': province,
+          if (postalCode != null) 'postal_code': postalCode,
+          if (contactName != null) 'contact_name': contactName,
+          if (contactPhone != null) 'contact_phone': contactPhone,
+          if (isActive != null) 'is_active': isActive,
+        },
+      );
       return const Ok(null);
     } on DioException catch (e) {
       return Err(mapDioErrorToFailure(e));
     } catch (e) {
-      return Err(AppFailure(
-        type: FailureType.unknown,
-        message: e.toString(),
-      ));
+      return Err(AppFailure(type: FailureType.unknown, message: e.toString()));
     }
   }
 
@@ -129,10 +122,7 @@ class InventoryRepository {
     } on DioException catch (e) {
       return Err(mapDioErrorToFailure(e));
     } catch (e) {
-      return Err(AppFailure(
-        type: FailureType.unknown,
-        message: e.toString(),
-      ));
+      return Err(AppFailure(type: FailureType.unknown, message: e.toString()));
     }
   }
 
@@ -164,10 +154,7 @@ class InventoryRepository {
     } on DioException catch (e) {
       return Err(mapDioErrorToFailure(e));
     } catch (e) {
-      return Err(AppFailure(
-        type: FailureType.unknown,
-        message: e.toString(),
-      ));
+      return Err(AppFailure(type: FailureType.unknown, message: e.toString()));
     }
   }
 
@@ -175,14 +162,13 @@ class InventoryRepository {
   Future<AppResult<InventoryItemModel>> getItem(String id) async {
     try {
       final response = await _dio.get('/items/$id');
-      return Ok(InventoryItemModel.fromJson(response.data as Map<String, dynamic>));
+      return Ok(
+        InventoryItemModel.fromJson(response.data as Map<String, dynamic>),
+      );
     } on DioException catch (e) {
       return Err(mapDioErrorToFailure(e));
     } catch (e) {
-      return Err(AppFailure(
-        type: FailureType.unknown,
-        message: e.toString(),
-      ));
+      return Err(AppFailure(type: FailureType.unknown, message: e.toString()));
     }
   }
 
@@ -197,48 +183,52 @@ class InventoryRepository {
     List<String>? warehouseIds,
   }) async {
     try {
-      final response = await _dio.post('/items', data: {
-        'sku': sku,
-        'name': name,
-        if (description != null) 'description': description,
-        if (categoryId != null) 'category_id': categoryId,
-        'unit_cost': unitCost,
-        'reorder_point': reorderPoint,
-        if (warehouseIds != null && warehouseIds.isNotEmpty) 'warehouse_ids': warehouseIds,
-      });
-      return Ok(InventoryItemModel.fromJson(response.data as Map<String, dynamic>));
+      final response = await _dio.post(
+        '/items',
+        data: {
+          'sku': sku,
+          'name': name,
+          if (description != null) 'description': description,
+          if (categoryId != null) 'category_id': categoryId,
+          'unit_cost': unitCost,
+          'reorder_point': reorderPoint,
+          if (warehouseIds != null && warehouseIds.isNotEmpty)
+            'warehouse_ids': warehouseIds,
+        },
+      );
+      return Ok(
+        InventoryItemModel.fromJson(response.data as Map<String, dynamic>),
+      );
     } on DioException catch (e) {
       return Err(mapDioErrorToFailure(e));
     } catch (e) {
-      return Err(AppFailure(
-        type: FailureType.unknown,
-        message: e.toString(),
-      ));
+      return Err(AppFailure(type: FailureType.unknown, message: e.toString()));
     }
   }
 
   /// Update item quantity (adjust stock).
-  Future<AppResult<void>> adjustQuantity(String itemId, {
+  Future<AppResult<void>> adjustQuantity(
+    String itemId, {
     required double quantityChange,
     required String notes,
     String? referenceType,
     String? referenceId,
   }) async {
     try {
-      await _dio.post('/items/$itemId/adjust-quantity', data: {
-        'quantity_change': quantityChange,
-        'notes': notes,
-        if (referenceType != null) 'reference_type': referenceType,
-        if (referenceId != null) 'reference_id': referenceId,
-      });
+      await _dio.post(
+        '/items/$itemId/adjust-quantity',
+        data: {
+          'quantity_change': quantityChange,
+          'notes': notes,
+          if (referenceType != null) 'reference_type': referenceType,
+          if (referenceId != null) 'reference_id': referenceId,
+        },
+      );
       return const Ok(null);
     } on DioException catch (e) {
       return Err(mapDioErrorToFailure(e));
     } catch (e) {
-      return Err(AppFailure(
-        type: FailureType.unknown,
-        message: e.toString(),
-      ));
+      return Err(AppFailure(type: FailureType.unknown, message: e.toString()));
     }
   }
 
@@ -278,10 +268,7 @@ class InventoryRepository {
     } on DioException catch (e) {
       return Err(mapDioErrorToFailure(e));
     } catch (e) {
-      return Err(AppFailure(
-        type: FailureType.unknown,
-        message: e.toString(),
-      ));
+      return Err(AppFailure(type: FailureType.unknown, message: e.toString()));
     }
   }
 
@@ -295,22 +282,22 @@ class InventoryRepository {
     String? notes,
   }) async {
     try {
-      await _dio.post('/movements/in', data: {
-        'item_id': itemId,
-        'warehouse_id': warehouseId,
-        'quantity': quantity,
-        'reference_type': referenceType,
-        if (referenceId != null) 'reference_id': referenceId,
-        if (notes != null) 'notes': notes,
-      });
+      await _dio.post(
+        '/movements/in',
+        data: {
+          'item_id': itemId,
+          'warehouse_id': warehouseId,
+          'quantity': quantity,
+          'reference_type': referenceType,
+          if (referenceId != null) 'reference_id': referenceId,
+          if (notes != null) 'notes': notes,
+        },
+      );
       return const Ok(null);
     } on DioException catch (e) {
       return Err(mapDioErrorToFailure(e));
     } catch (e) {
-      return Err(AppFailure(
-        type: FailureType.unknown,
-        message: e.toString(),
-      ));
+      return Err(AppFailure(type: FailureType.unknown, message: e.toString()));
     }
   }
 
@@ -324,22 +311,22 @@ class InventoryRepository {
     String? notes,
   }) async {
     try {
-      await _dio.post('/movements/out', data: {
-        'item_id': itemId,
-        'warehouse_id': warehouseId,
-        'quantity': quantity,
-        'reference_type': referenceType,
-        if (referenceId != null) 'reference_id': referenceId,
-        if (notes != null) 'notes': notes,
-      });
+      await _dio.post(
+        '/movements/out',
+        data: {
+          'item_id': itemId,
+          'warehouse_id': warehouseId,
+          'quantity': quantity,
+          'reference_type': referenceType,
+          if (referenceId != null) 'reference_id': referenceId,
+          if (notes != null) 'notes': notes,
+        },
+      );
       return const Ok(null);
     } on DioException catch (e) {
       return Err(mapDioErrorToFailure(e));
     } catch (e) {
-      return Err(AppFailure(
-        type: FailureType.unknown,
-        message: e.toString(),
-      ));
+      return Err(AppFailure(type: FailureType.unknown, message: e.toString()));
     }
   }
 
@@ -352,21 +339,21 @@ class InventoryRepository {
     String? notes,
   }) async {
     try {
-      await _dio.post('/movements/transfer', data: {
-        'item_id': itemId,
-        'from_warehouse_id': fromWarehouseId,
-        'to_warehouse_id': toWarehouseId,
-        'quantity': quantity,
-        if (notes != null) 'notes': notes,
-      });
+      await _dio.post(
+        '/movements/transfer',
+        data: {
+          'item_id': itemId,
+          'from_warehouse_id': fromWarehouseId,
+          'to_warehouse_id': toWarehouseId,
+          'quantity': quantity,
+          if (notes != null) 'notes': notes,
+        },
+      );
       return const Ok(null);
     } on DioException catch (e) {
       return Err(mapDioErrorToFailure(e));
     } catch (e) {
-      return Err(AppFailure(
-        type: FailureType.unknown,
-        message: e.toString(),
-      ));
+      return Err(AppFailure(type: FailureType.unknown, message: e.toString()));
     }
   }
 }

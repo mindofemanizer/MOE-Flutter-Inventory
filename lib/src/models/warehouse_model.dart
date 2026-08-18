@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 /// Model representing a warehouse/location.
 class WarehouseModel extends Equatable {
   final String id;
