@@ -49,12 +49,12 @@ class InventoryRepository {
         data: {
           'name': name,
           'code': code,
-          if (address != null) 'address': address,
-          if (city != null) 'city': city,
-          if (province != null) 'province': province,
-          if (postalCode != null) 'postal_code': postalCode,
-          if (contactName != null) 'contact_name': contactName,
-          if (contactPhone != null) 'contact_phone': contactPhone,
+          'address': ?address,
+          'city': ?city,
+          'province': ?province,
+          'postal_code': ?postalCode,
+          'contact_name': ?contactName,
+          'contact_phone': ?contactPhone,
           'capacity': capacity,
         },
       );
@@ -95,15 +95,15 @@ class InventoryRepository {
       await _dio.patch(
         '/warehouses/$id',
         data: {
-          if (name != null) 'name': name,
-          if (code != null) 'code': code,
-          if (address != null) 'address': address,
-          if (city != null) 'city': city,
-          if (province != null) 'province': province,
-          if (postalCode != null) 'postal_code': postalCode,
-          if (contactName != null) 'contact_name': contactName,
-          if (contactPhone != null) 'contact_phone': contactPhone,
-          if (isActive != null) 'is_active': isActive,
+          'name': ?name,
+          'code': ?code,
+          'address': ?address,
+          'city': ?city,
+          'province': ?province,
+          'postal_code': ?postalCode,
+          'contact_name': ?contactName,
+          'contact_phone': ?contactPhone,
+          'is_active': ?isActive,
         },
       );
       return const Ok(null);
@@ -140,8 +140,8 @@ class InventoryRepository {
       final params = <String, dynamic>{
         'page': page,
         'limit': limit,
-        if (search != null) 'search': search,
-        if (categoryCode != null) 'category_code': categoryCode,
+        'search': ?search,
+        'category_code': ?categoryCode,
         if (onlyLowStock == true) 'only_low_stock': true,
       };
       final response = await _dio.get('/items', queryParameters: params);
@@ -188,8 +188,8 @@ class InventoryRepository {
         data: {
           'sku': sku,
           'name': name,
-          if (description != null) 'description': description,
-          if (categoryId != null) 'category_id': categoryId,
+          'description': ?description,
+          'category_id': ?categoryId,
           'unit_cost': unitCost,
           'reorder_point': reorderPoint,
           if (warehouseIds != null && warehouseIds.isNotEmpty)
@@ -220,8 +220,8 @@ class InventoryRepository {
         data: {
           'quantity_change': quantityChange,
           'notes': notes,
-          if (referenceType != null) 'reference_type': referenceType,
-          if (referenceId != null) 'reference_id': referenceId,
+          'reference_type': ?referenceType,
+          'reference_id': ?referenceId,
         },
       );
       return const Ok(null);
@@ -250,11 +250,11 @@ class InventoryRepository {
       final params = <String, dynamic>{
         'page': page,
         'limit': limit,
-        if (itemId != null) 'item_id': itemId,
-        if (warehouseId != null) 'warehouse_id': warehouseId,
-        if (fromWarehouseId != null) 'from_warehouse_id': fromWarehouseId,
-        if (toWarehouseId != null) 'to_warehouse_id': toWarehouseId,
-        if (movementType != null) 'type': movementType,
+        'item_id': ?itemId,
+        'warehouse_id': ?warehouseId,
+        'from_warehouse_id': ?fromWarehouseId,
+        'to_warehouse_id': ?toWarehouseId,
+        'type': ?movementType,
         if (startDate != null) 'start_date': startDate.toIso8601String(),
         if (endDate != null) 'end_date': endDate.toIso8601String(),
       };
@@ -289,8 +289,8 @@ class InventoryRepository {
           'warehouse_id': warehouseId,
           'quantity': quantity,
           'reference_type': referenceType,
-          if (referenceId != null) 'reference_id': referenceId,
-          if (notes != null) 'notes': notes,
+          'reference_id': ?referenceId,
+          'notes': ?notes,
         },
       );
       return const Ok(null);
@@ -318,8 +318,8 @@ class InventoryRepository {
           'warehouse_id': warehouseId,
           'quantity': quantity,
           'reference_type': referenceType,
-          if (referenceId != null) 'reference_id': referenceId,
-          if (notes != null) 'notes': notes,
+          'reference_id': ?referenceId,
+          'notes': ?notes,
         },
       );
       return const Ok(null);
@@ -346,7 +346,7 @@ class InventoryRepository {
           'from_warehouse_id': fromWarehouseId,
           'to_warehouse_id': toWarehouseId,
           'quantity': quantity,
-          if (notes != null) 'notes': notes,
+          'notes': ?notes,
         },
       );
       return const Ok(null);
